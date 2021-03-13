@@ -25,3 +25,18 @@ def CreateTask(request):
     else:
         form = TaskForm()
         return render(request,'create_task.html',{'form': form})
+
+#view for the view-tasks url
+def ViewTasks(request):
+    #if the user isn't logged in, redirect to the homepage
+    if not request.user.is_authenticated:
+        return redirect('')
+    #if the user is logged in, query the db for their tasks
+    #and dispaly them
+    else:
+        username = request.user.username
+        tasks = TaskModel.objects.all().filter(username=username)
+        ret_str = ''
+        for task in tasks:
+            ret_str = ret_str + str(task)
+        return HttpResponse(ret_str)

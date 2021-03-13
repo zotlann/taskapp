@@ -16,4 +16,4 @@ class TaskModel(models.Model):
             completed = 'completed'
         else:
             completed = 'not completed'
-        return datetime.strftime(self.due_date,'%m/%d/%Y %H:%M') + ' ' + self.title + ' ' + self.details + ' '  + comleted +'<br>'
+        return datetime.strftime(self.due_date,'%m/%d/%Y %H:%M') + ' ' + self.title + ' ' + self.details + ' '  + completed +'<br>'
