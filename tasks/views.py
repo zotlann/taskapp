@@ -46,10 +46,19 @@ def EditTask(request):
     #get the id of the task to edit
     task_id = int(request.GET.get('id'))
     task = TaskModel.objects.get(id=task_id)
+    #if the method is POST, update the task object
+    if request.method == 'POST':
+        task.title = request.POST['title']
+        task.details = request.POST['details']
+        task.due_date = request.POST['due_date']
+        task.save()
+        return HttpResponse('Task Updated')
     #if the task doesn't belong to the current user, redirect to the homepage
     if task.username != request.user.username:
         return redirect('/')
     #else display the task
     else:
-        return HttpResponse(str(task))
+        date = task.due_date
+        form = TaskForm(initial={'title':task.title,'due_date':datetime.strftime(task.due_date,'%Y-%m-%dT%H:%M'),'details':task.details})
+        return render(request,'edit_task.html',{'form':form})
 
