@@ -1,0 +1,20 @@
+<html>
+	<table>
+		<tr>
+			<th>Task Title</th>
+			<th>Due Date</th>
+			<th>Details</th>
+			<th>Completed?</th>
+			<th></th>
+		</tr>
+		{% for task in obj %}
+		<tr>
+			<td>{{task.title}}</td>
+			<td>{{task.due_date}}</td>
+			<td>{{task.details}}</td>
+			<td>{{task.is_completed}}</td>
+			<td><a href="/edit-task?id={{task.id}}">Edit</a></td>
+		</tr>
+		{% endfor %}
+	</table>
+</html>

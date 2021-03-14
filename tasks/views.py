@@ -30,13 +30,26 @@ def CreateTask(request):
 def ViewTasks(request):
     #if the user isn't logged in, redirect to the homepage
     if not request.user.is_authenticated:
-        return redirect('')
+        return redirect('/')
     #if the user is logged in, query the db for their tasks
     #and dispaly them
     else:
         username = request.user.username
         tasks = TaskModel.objects.all().filter(username=username)
-        ret_str = ''
-        for task in tasks:
-            ret_str = ret_str + str(task)
-        return HttpResponse(ret_str)
+        return render(request,'view_tasks.html',{'obj':tasks})
+
+#view for the edit-task url
+def EditTask(request):
+    #if the user isn't logged in, redirect to the homepage
+    if not request.user.is_authenticated:
+        return redirect('/')
+    #get the id of the task to edit
+    task_id = int(request.GET.get('id'))
+    task = TaskModel.objects.get(id=task_id)
+    #if the task doesn't belong to the current user, redirect to the homepage
+    if task.username != request.user.username:
+        return redirect('/')
+    #else display the task
+    else:
+        return HttpResponse(str(task))
+
