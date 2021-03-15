@@ -9,7 +9,7 @@ from django.shortcuts import redirect
 def CreateTask(request):
     #if the user isn't logged in, redirect to the homepage
     if not request.user.is_authenticated:
-        return redirect('')
+        return redirect('/')
     #if we recieved the task data in the form, create
     #an instace of our Task model and save it to the db
     #and show a screen indicating the task was saved
@@ -20,7 +20,7 @@ def CreateTask(request):
         username = request.user.username
         task_instance = TaskModel.objects.create(username=username, title=title, due_date=due_date, details=details, is_completed=False)
         task_instance.save()
-        return HttpResponse("Task has been saved.")
+        return redirect(ViewTasks)
     #if we haven't recieved the task data, display the form
     else:
         form = TaskForm()
@@ -42,7 +42,7 @@ def ViewTasks(request):
         #if the user is logged in, query the db for their tasks
         #and dispaly them
         username = request.user.username
-        tasks = TaskModel.objects.all().filter(username=username,is_completed=False)
+        tasks = TaskModel.objects.all().filter(username=username,is_completed=False).order_by('due_date')
         return render(request,'view_tasks.html',{'obj':tasks})
 
 #view for the view-complete url
@@ -60,7 +60,7 @@ def ViewCompletedTasks(request):
             task.save()
         #display the completed tasks
         username = request.user.username
-        tasks = TaskModel.objects.all().filter(username=username,is_completed=True)
+        tasks = TaskModel.objects.all().filter(username=username,is_completed=True).order_by('-due_date')
         return render(request,'view_completed.html',{'obj':tasks})
 
 #view for the edit-task url
@@ -77,7 +77,7 @@ def EditTask(request):
         task.details = request.POST['details']
         task.due_date = request.POST['due_date']
         task.save()
-        return HttpResponse('Task Updated')
+        return redirect(ViewTasks)
     #if the task doesn't belong to the current user, redirect to the homepage
     if task.username != request.user.username:
         return redirect('/')

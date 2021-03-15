@@ -17,3 +17,8 @@ class TaskModel(models.Model):
         else:
             completed = 'not completed'
         return datetime.strftime(self.due_date,'%m/%d/%Y %H:%M') + ' ' + self.title + ' ' + self.details + ' '  + completed +'<br>'
+
+    #a task is less than another task if it's due date is sooner
+    def __lt__(self,other):
+        return self.due_date < other.due_date
+        
