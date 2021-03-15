@@ -29,7 +29,6 @@ table, th, td{
 			<th>Details</th>
 			<th>Completed?</th>
 			<th></th>
-			<th></th>
 		</tr>
 		{% for task in obj %}
 		<tr>
@@ -37,11 +36,10 @@ table, th, td{
 			<td>{{task.due_date}}</td>
 			<td>{{task.details}}</td>
 			<td>{{task.is_completed}}</td>
-			<td><a href="/view-tasks?id={{task.id}}">Mark as Completed</a></td>
-			<td><a href="/edit-task?id={{task.id}}">Edit</a></td>
+			<td><a href="/view-completed?id={{task.id}}">Mark as Incomplete</a></td>
 		</tr>
 		{% endfor %}
 	</table>
 	</div>
-	<div id="bot"><br><body><a href="/view-completed">View Completed Tasks</a></body></div>
+	<div id="bot"><br><body><a href="/view-tasks">View Incomplete Tasks</a></body></div>
 </html>

@@ -31,12 +31,37 @@ def ViewTasks(request):
     #if the user isn't logged in, redirect to the homepage
     if not request.user.is_authenticated:
         return redirect('/')
-    #if the user is logged in, query the db for their tasks
-    #and dispaly them
     else:
+        #if there is an id property in the query string, mark that task as completed
+        task_id = request.GET.get('id')
+        if task_id is not None:
+            task_id = int(task_id)
+            task = TaskModel.objects.get(id=task_id)
+            task.is_completed = True
+            task.save()
+        #if the user is logged in, query the db for their tasks
+        #and dispaly them
         username = request.user.username
-        tasks = TaskModel.objects.all().filter(username=username)
+        tasks = TaskModel.objects.all().filter(username=username,is_completed=False)
         return render(request,'view_tasks.html',{'obj':tasks})
+
+#view for the view-complete url
+def ViewCompletedTasks(request):
+    #if the user isn't logged in, redirect to the homepage
+    if not request.user.is_authenticated:
+        return redirect('/')
+    else:
+        #if there is an id property in the query string, mark that task as incomplete
+        task_id = request.GET.get('id')
+        if task_id is not None:
+            task_id = int(task_id)
+            task = TaskModel.objects.get(id=task_id)
+            task.is_completed = False
+            task.save()
+        #display the completed tasks
+        username = request.user.username
+        tasks = TaskModel.objects.all().filter(username=username,is_completed=True)
+        return render(request,'view_completed.html',{'obj':tasks})
 
 #view for the edit-task url
 def EditTask(request):

@@ -1,7 +1,27 @@
+<html>
+<head>
+<style>
+a:link, a:visited{
+  background-color: #90ee90;
+  color: white;
+  padding: 14px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+a:hover, a:active {
+  background-color: green;
+}
+
+</style>
+</head>
+
 <title>Home</title>
 {% block content %}
 {% if user.is_authenticated %}
-  Hi {{user.username}}!	  
+  Hi {{user.username}}!	
+  <div><br></div>
   <a href="create-task/">Create Task</a>
   <a href="view-tasks">View Tasks</a>
   <a href="{%url 'logout' %}">Log Out</a>
@@ -12,3 +32,5 @@
   <a href="create-account/">Create Account</a>
  {% endif %}
  {% endblock %}
+
+</html>
